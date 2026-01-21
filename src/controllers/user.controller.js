@@ -1,4 +1,4 @@
-import { createUserSchema } from "../validator/user.validator.js";
+import { createUserSchema, userIdSchema } from "../validator/user.validator.js";
 
 const createUser = async (req, reply) => {
   const data = createUserSchema.parse(req.body);
@@ -25,7 +25,21 @@ const getAllUsers = async (req, reply) => {
     return reply.code(404).send({ message: "No users found" });
   }
 
-  reply.send(users);
+  reply.code(200).send(users);
 };
 
-export { createUser, getAllUsers };
+const getUserById = async (req, reply) => {
+  userIdSchema.parse(req.params);
+
+  const user = await req.server.prisma.user.findFirst({
+    where: { id: req.params.id, isActive: true },
+  });
+
+  if (!user) {
+    return reply.code(404).send({ message: "User not found" });
+  }
+
+  reply.code(200).send(user);
+};
+
+export { createUser, getAllUsers, getUserById };

@@ -6,4 +6,8 @@ const createUserSchema = z.object({
   age: z.number().optional(),
 });
 
-export { createUserSchema };
+const userIdSchema = z.object({
+  id: z.string().uuid("Invalid User Id").min(1, "User ID is required"),
+});
+
+export { createUserSchema, userIdSchema };
