@@ -3,3 +3,8 @@ node_modules
 dist
 .prisma
 npm-debug.log
+/src/generated/prisma
+
+/src/generated/prisma
+
+/src/generated/prisma
