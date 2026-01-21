@@ -15,4 +15,17 @@ const createUser = async (req, reply) => {
   reply.code(201).send(user);
 };
 
-export { createUser };
+const getAllUsers = async (req, reply) => {
+  const users = await req.server.prisma.user.findMany({
+    where: { isActive: true },
+    orderBy: { createdAt: "desc" },
+  });
+
+  if (users.length === 0) {
+    return reply.code(404).send({ message: "No users found" });
+  }
+
+  reply.send(users);
+};
+
+export { createUser, getAllUsers };
