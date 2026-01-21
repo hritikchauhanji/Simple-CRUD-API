@@ -16,6 +16,11 @@ const createUser = async (req, reply) => {
   }
 
   const user = await req.server.prisma.user.create({ data });
+
+  if (!user) {
+    return reply.code(500).send({ message: "User not created" });
+  }
+
   reply.code(201).send(user);
 };
 
