@@ -2,6 +2,7 @@
   "name": "crud_rest_apis",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,12 +17,18 @@
     "APIS",
     "BACKEND",
     "FASTIFY",
-    "PRISMA"
+    "PRISMA",
+    "NODEJS"
   ],
   "author": "Hritik Chauhan",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/hritikchauhanji/Simple-CRUD-API/issues"
   },
-  "homepage": "https://github.com/hritikchauhanji/Simple-CRUD-API#readme"
+  "homepage": "https://github.com/hritikchauhanji/Simple-CRUD-API#readme",
+  "dependencies": {
+    "@prisma/client": "^7.2.0",
+    "fastify": "^5.7.1",
+    "zod": "^4.3.5"
+  }
 }
