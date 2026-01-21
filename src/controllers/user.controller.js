@@ -1,4 +1,8 @@
-import { createUserSchema, userIdSchema } from "../validator/user.validator.js";
+import {
+  createUserSchema,
+  updateUserSchema,
+  userIdSchema,
+} from "../validator/user.validator.js";
 
 const createUser = async (req, reply) => {
   const data = createUserSchema.parse(req.body);
@@ -42,4 +46,28 @@ const getUserById = async (req, reply) => {
   reply.code(200).send(user);
 };
 
-export { createUser, getAllUsers, getUserById };
+const updateUser = async (req, reply) => {
+  userIdSchema.parse(req.params);
+  const data = updateUserSchema.parse(req.body);
+
+  const user = await req.server.prisma.user.findUnique({
+    where: { id: req.params.id },
+  });
+
+  if (!user || !user.isActive) {
+    return reply.code(404).send({ message: "User not found" });
+  }
+
+  const updatedUser = await req.server.prisma.user.update({
+    where: { id: req.params.id },
+    data,
+  });
+
+  if (!updatedUser) {
+    reply.code(500).send({ message: "User not update" });
+  }
+
+  reply.code(200).send(updatedUser);
+};
+
+export { createUser, getAllUsers, getUserById, updateUser };
