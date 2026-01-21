@@ -1,5 +1,6 @@
 import {
   createUser,
+  deleteUser,
   getAllUsers,
   getUserById,
   updateUser,
@@ -10,6 +11,7 @@ const userRoutes = async (fastify) => {
   fastify.get("/users", getAllUsers);
   fastify.get("/users/:id", getUserById);
   fastify.patch("/users/:id", updateUser);
+  fastify.delete("/users/:id", deleteUser);
 };
 
 export default userRoutes;
