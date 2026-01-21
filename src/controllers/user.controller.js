@@ -1,101 +1,62 @@
+import { success } from "zod";
 import {
-  createUserSchema,
-  updateUserSchema,
-  userIdSchema,
-} from "../validator/user.validator.js";
+  createUserService,
+  getAllUsersService,
+  getUserByIdService,
+  updateUserService,
+  deleteUserService,
+} from "../services/user.service.js";
+import { handleError } from "../utils/errorHandler.js";
 
 const createUser = async (req, reply) => {
-  const data = createUserSchema.parse(req.body);
-
-  const existUser = await req.server.prisma.user.findUnique({
-    where: { email: data.email },
-  });
-
-  if (existUser) {
-    return reply.code(409).send({ message: "Email is already exists" });
+  try {
+    const user = await createUserService(req.server.prisma, req.body);
+    return reply.code(201).send(user);
+  } catch (error) {
+    handleError(reply, error);
   }
-
-  const user = await req.server.prisma.user.create({ data });
-
-  if (!user) {
-    return reply.code(500).send({ message: "User not created" });
-  }
-
-  reply.code(201).send(user);
 };
 
 const getAllUsers = async (req, reply) => {
-  const users = await req.server.prisma.user.findMany({
-    where: { isActive: true },
-    orderBy: { createdAt: "desc" },
-  });
-
-  if (users.length === 0) {
-    return reply.code(404).send({ message: "No users found" });
+  try {
+    const users = await getAllUsersService(req.server.prisma);
+    return reply.code(200).send(users);
+  } catch (error) {
+    handleError(reply, error);
   }
-
-  reply.code(200).send(users);
 };
 
 const getUserById = async (req, reply) => {
-  userIdSchema.parse(req.params);
-
-  const user = await req.server.prisma.user.findFirst({
-    where: { id: req.params.id, isActive: true },
-  });
-
-  if (!user) {
-    return reply.code(404).send({ message: "User not found" });
+  try {
+    const user = await getUserByIdService(req.server.prisma, req.params);
+    return reply.code(200).send(user);
+  } catch (error) {
+    handleError(reply, error);
   }
-
-  reply.code(200).send(user);
 };
 
 const updateUser = async (req, reply) => {
-  userIdSchema.parse(req.params);
-  const data = updateUserSchema.parse(req.body);
-
-  const user = await req.server.prisma.user.findUnique({
-    where: { id: req.params.id },
-  });
-
-  if (!user || !user.isActive) {
-    return reply.code(404).send({ message: "User not found" });
+  try {
+    const user = await updateUserService(
+      req.server.prisma,
+      req.params,
+      req.body,
+    );
+    return reply.code(200).send(user);
+  } catch (error) {
+    handleError(reply, error);
   }
-
-  const updatedUser = await req.server.prisma.user.update({
-    where: { id: req.params.id },
-    data,
-  });
-
-  if (!updatedUser) {
-    reply.code(500).send({ message: "User not update" });
-  }
-
-  reply.code(200).send(updatedUser);
 };
 
 const deleteUser = async (req, reply) => {
-  userIdSchema.parse(req.params);
-
-  const user = await req.server.prisma.user.findUnique({
-    where: { id: req.params.id },
-  });
-
-  if (!user || !user.isActive) {
-    return reply.code(404).send({ message: "User not found" });
+  try {
+    await deleteUserService(req.server.prisma, req.params);
+    return reply
+      .code(200)
+      .send({ success: true, message: "User deleted successfully" });
+  } catch (error) {
+    handleError(reply, error);
   }
-
-  const deletedUser = await req.server.prisma.user.update({
-    where: { id: req.params.id },
-    data: { isActive: false },
-  });
-
-  if (!deletedUser) {
-    return reply.code(500).send({ message: "User not deleted" });
-  }
-
-  reply.code(200).send({ message: "User deleted successfully" });
 };
 
 export { createUser, getAllUsers, getUserById, updateUser, deleteUser };

@@ -10,7 +10,7 @@ const app = Fastify({
 app.register(prismaPlugin);
 app.register(userRoutes);
 
-app.setErrorHandler(errorHandler);
+// app.setErrorHandler(errorHandler);
 
 app.get("/health", async () => {
   return {
