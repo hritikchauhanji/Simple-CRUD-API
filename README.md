@@ -17,6 +17,7 @@ This project demonstrates backend fundamentals such as request validation, soft 
 
 ## Project Structure
 
+```bash
 CRUD_REST_APIs/
 ├── prisma/
 │ └── schema.prisma
@@ -36,6 +37,7 @@ CRUD_REST_APIs/
 ├── .env
 ├── package.json
 └── README.md
+```
 
 ---
 
