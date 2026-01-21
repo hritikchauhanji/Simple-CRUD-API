@@ -64,20 +64,32 @@ DELETE /users/:id
 
 ## Setup Instructions
 
-1. Install dependencies  
-   npm install
+1. Install dependencies
 
-2. Setup environment variables  
+```bash
+   npm install
+```
+
+2. Setup environment variables
+
+```bash
    PORT=3000
    NODE_ENV=development
    DATABASE_URL=postgresql://username:password@host:port/database
+```
 
-3. Run migrations  
-   npx prisma migrate dev  
+3. Run migrations
+
+```bash
+   npx prisma migrate dev
    npx prisma generate
+```
 
-4. Start server  
+4. Start server
+
+```bash
    node src/server.js or npm run dev
+```
 
 ---
 
