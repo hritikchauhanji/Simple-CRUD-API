@@ -1,9 +1,10 @@
 import { ZodError } from "zod";
 import AppError from "./appError.js";
+import type { FastifyReply } from "fastify";
 
-const handleError = (reply, error) => {
+const handleError = (reply: FastifyReply, error: unknown) => {
   if (error instanceof ZodError) {
-    const errors = {};
+    const errors: Record<string, string> = {};
 
     error.issues.forEach((issue) => {
       const field = issue.path.join(".") || "body";

@@ -1,14 +1,17 @@
 import Fastify from "fastify";
 import prismaPlugin from "./config/prisma.js";
 import userRoutes from "./routes/user.routes.js";
-import { errorHandler } from "./middleware/error.middleware.js";
+import cookie from "@fastify/cookie";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = Fastify({
   logger: true,
 });
 
 app.register(prismaPlugin);
+app.register(cookie);
 app.register(userRoutes);
+app.register(authRoutes);
 
 // app.setErrorHandler(errorHandler);
 
